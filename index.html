@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How ALICA Calculator Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,560;0,9..144,650;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B2545;
+    --teal:#127475;
+    --gold:#B4893C;
+    --cream:#F7F4EE;
+    --paper:#FFFEFC;
+    --slate:#3E4C59;
+    --line:#E4DDCF;
+    --radius:3px;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --cream:#101820; --paper:#141D27; --slate:#C7CFD6; --line:#273445; --navy:#EDE7DA;
+    }
+  }
+  :root[data-theme="dark"]{
+    --cream:#101820; --paper:#141D27; --slate:#C7CFD6; --line:#273445; --navy:#EDE7DA;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:24px;}
+  body{
+    margin:0; background:var(--cream); color:var(--slate);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:17px; line-height:1.65;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces',Georgia,serif; color:var(--navy); margin:0 0 .5em; font-weight:650;
+  }
+  a{color:var(--teal);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    background:var(--navy); color:#F3EFE4;
+    padding:76px 24px 54px;
+  }
+  .hero-inner{max-width:760px; margin:0 auto; position:relative; z-index:2;}
+  .hero-curve{position:absolute; inset:0; z-index:1; opacity:.55;}
+  .hero h1{
+    color:#FBF8F1; font-size:clamp(2.1rem, 4.6vw, 3.1rem); line-height:1.1; letter-spacing:-0.01em;
+  }
+  .hero p.lede{
+    max-width:52ch; font-size:1.08rem; color:#CFD8E0; margin-top:16px;
+  }
+  .hero-tag{
+    display:inline-block; font-size:.82rem; color:var(--gold); letter-spacing:.02em;
+    border:1px solid rgba(180,137,60,.45); padding:5px 12px; border-radius:20px; margin-bottom:22px;
+  }
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:980px; margin:0 auto; padding:0 24px; display:grid; grid-template-columns:200px 1fr; gap:56px;}
+  @media (max-width:820px){ .wrap{grid-template-columns:1fr;} .toc{display:none;} }
+
+  .toc{
+    position:sticky; top:28px; align-self:start; padding-top:56px;
+    font-size:.92rem;
+  }
+  .toc-label{color:var(--navy); font-weight:600; margin-bottom:10px; font-size:.82rem;}
+  .toc a{
+    display:block; color:var(--slate); text-decoration:none; padding:7px 0 7px 14px;
+    border-left:2px solid var(--line);
+  }
+  .toc a:hover{color:var(--teal); border-left-color:var(--teal);}
+
+  main{padding:56px 0 40px; max-width:680px;}
+  section{padding-bottom:40px; margin-bottom:40px; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  section p{margin:0 0 16px;}
+  h2{font-size:1.5rem; margin-top:4px;}
+  h2 .kicker{display:block; font-size:.8rem; color:var(--teal); font-weight:500; margin-bottom:6px; font-family:'Inter',sans-serif;}
+
+  .intro p{font-size:1.06rem;}
+
+  /* calculator type cards */
+  .calc-grid{display:grid; gap:14px; margin-top:8px;}
+  .calc-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px 22px; border-left:3px solid var(--teal);
+  }
+  .calc-card h3{font-size:1.12rem; margin-bottom:6px; color:var(--navy);}
+  .calc-card p{margin:0; font-size:.98rem;}
+
+  .pullnote{
+    background:var(--paper); border:1px solid var(--line); border-left:3px solid var(--gold);
+    padding:18px 20px; font-size:.97rem; border-radius:var(--radius); color:var(--slate);
+  }
+  .pullnote strong{color:var(--navy);}
+
+  footer{
+    text-align:center; color:#8B95A1; font-size:.85rem; padding:32px 24px 56px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <svg class="hero-curve" viewBox="0 0 900 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#127475" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#127475" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="M0,220 C120,210 180,160 260,150 C340,140 380,190 460,170 C540,150 580,80 660,60 C740,40 800,70 900,20 L900,260 L0,260 Z" fill="url(#g1)"/>
+    <path d="M0,220 C120,210 180,160 260,150 C340,140 380,190 460,170 C540,150 580,80 660,60 C740,40 800,70 900,20" fill="none" stroke="#B4893C" stroke-width="2"/>
+  </svg>
+  <div class="hero-inner">
+    <span class="hero-tag">Investment planning tool</span>
+    <h1>How ALICA Calculator Works</h1>
+    <p class="lede">A simple guide to understanding how ALICA Calculator helps investors estimate returns, dividends, profits, and investment growth.</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="toc">
+    <div class="toc-label">On this page</div>
+    <a href="#intro">Introduction</a>
+    <a href="#how">How it works</a>
+    <a href="#investment">Investment calculator</a>
+    <a href="#dividend">Dividend calculator</a>
+    <a href="#returns">Return &amp; profit</a>
+    <a href="#roi">ROI calculator</a>
+    <a href="#why">Why use it</a>
+    <a href="#conclusion">Conclusion</a>
+  </nav>
+
+  <main>
+    <section id="intro" class="intro">
+      <h2><span class="kicker">Introduction</span>Turning numbers into estimates</h2>
+      <p>Investing can involve a lot of calculations, especially when you want to understand how much an investment could grow over time. <a href="https://laacalculadoraalicia.es/" target="_blank" rel="noopener">ALICA Calculator</a> is designed to make these calculations easier by turning basic investment information into useful estimates.</p>
+      <p>Instead of calculating everything manually, users can enter details such as their investment amount, expected return, dividend income, or investment period. The calculator then processes the information and displays the estimated results in a simple format.</p>
+    </section>
+
+    <section id="how">
+      <h2><span class="kicker">The mechanics</span>How does ALICA Calculator work?</h2>
+      <p>ALICA Calculator works by using the information entered by the user and applying relevant investment formulas to calculate the requested result. It is primarily an investment and dividend calculation tool, rather than an automated trading platform.</p>
+      <p>Depending on the calculation being performed, users may enter an initial investment, additional contributions, expected return, dividend rate, or other relevant figures. The calculator processes these values and presents the result, helping users understand the potential outcome of different investment scenarios.</p>
+    </section>
+
+    <section id="investment">
+      <h2><span class="kicker">Growth estimates</span>Investment calculator</h2>
+      <p>The investment calculator can be used to estimate how an initial amount may grow based on a selected return rate and investment period. By changing the inputs, users can compare different possible outcomes.</p>
+      <p>For example, increasing the expected annual return or extending the investment period can change the estimated final value. This makes it easier to explore hypothetical investment scenarios.</p>
+    </section>
+
+    <section id="dividend">
+      <h2><span class="kicker">Income estimates</span>Dividend calculator</h2>
+      <p>ALICA Calculator can also help users estimate potential dividend income. Users can enter information such as the amount invested and dividend yield to estimate how much income an investment could potentially generate.</p>
+      <p>This can be particularly useful when comparing investments based on their potential dividend returns.</p>
+    </section>
+
+    <section id="returns">
+      <h2><span class="kicker">Gains at a glance</span>Return and profit calculations</h2>
+      <p>The calculator can also be used to understand investment returns and potential profits. Instead of working through formulas manually, users provide the necessary figures and let the calculator perform the calculations.</p>
+      <p>This can help users quickly compare an original investment with its estimated value or profit.</p>
+    </section>
+
+    <section id="roi">
+      <h2><span class="kicker">Comparing opportunities</span>ROI calculator</h2>
+      <p>Return on investment, commonly known as ROI, is another useful calculation. ALICA Calculator can help determine the percentage return based on the initial investment and the resulting gain or value.</p>
+      <p>ROI calculations can make it easier to compare different hypothetical investment opportunities using the same measurement.</p>
+    </section>
+
+    <section id="why">
+      <h2><span class="kicker">The payoff</span>Why use ALICA Calculator?</h2>
+      <p>The main advantage of ALICA Calculator is simplicity. Investment calculations can become complicated when several figures are involved, but a calculator can provide results much faster.</p>
+      <p>It can also be useful for testing different scenarios. Users can change the investment amount, return rate, dividend yield, or time period and see how those changes affect the estimated result.</p>
+
+      <div class="calc-grid">
+        <div class="calc-card">
+          <h3>Investment</h3>
+          <p>Project how an initial amount could grow over a chosen period and return rate.</p>
+        </div>
+        <div class="calc-card">
+          <h3>Dividend</h3>
+          <p>Estimate income potential based on invested amount and dividend yield.</p>
+        </div>
+        <div class="calc-card">
+          <h3>ROI</h3>
+          <p>Measure percentage return to compare opportunities on equal footing.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="conclusion">
+      <h2><span class="kicker">In short</span>Conclusion</h2>
+      <p>ALICA Calculator works by taking investment-related information from the user and applying appropriate mathematical calculations to produce estimated results. Whether you want to explore potential investment growth, dividend income, profit, return, or ROI, the calculator provides a straightforward way to perform these calculations.</p>
+      <div class="pullnote">
+        <strong>A planning tool, not financial advice.</strong> Actual investment results can vary depending on market conditions, fees, taxes, and other factors.
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>How ALICA Calculator Works — a guide for investors.</footer>
+
+</body>
+</html>
